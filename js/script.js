@@ -51,6 +51,7 @@ $(document).ready(function(){
     $("#sendMsg").click(function(e) {
         e.preventDefault();
         if(!validateFormFields()) return;
+        $(".loader").show();
         const form = document.getElementById('contactForm');
         const result = document.getElementById('resultMsg');
         const formData = new FormData(form);
@@ -69,6 +70,7 @@ $(document).ready(function(){
             body: json
         })
         .then(async (response) => {
+            $(".loader").hide();
             let json = await response.json();
             if (response.status == 200) {
                 $(".successMsg").slideDown();
@@ -93,6 +95,10 @@ $(document).ready(function(){
         });
     });
 
+    /**
+     * Function to validate textbox fields from contact form details
+     * @returns boolean true if validation success else false.
+     */
     function validateFormFields() {
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         let name = document.getElementById("contactName");
@@ -118,14 +124,12 @@ $(document).ready(function(){
         }
         return true;
     };
-
-
-    function clearDt(event) {
-        debugger
-        event.parent().removeClass("error")
-    }
 });
+
+/**
+ * Function to clear error class on textbox on keypress
+ * @param {Event} event contains key press event object
+ */
 function clearDt(event) {
-    debugger
     event.parentElement.classList.remove("error")
 }
